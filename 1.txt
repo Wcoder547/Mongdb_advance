@@ -1,1 +1,20 @@
 MongoDb create Database _ collections Tutorial in urdu/Hindi 
+Mongosh command for terminal
+
+//Database
+use (dbName)
+show dbs
+db.dropDatabase()
+
+//collections
+db.createCollection("name here),
+db.old_name.renameCollection("New name")
+db.collection_name.drop()
+show collections
+
+//Help
+
+db.help()
+db.collection_name.help()
+
+
