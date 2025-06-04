@@ -1,0 +1,48 @@
+db.collection_name.updateOne(
+          {field:"value"},
+          {$set:{updated_field:"new_value"}}
+)
+
+
+db.collection_name.updateMany(
+          {field:"value"},
+          {$set:{updated_field:"new_value"}}
+)
+
+
+db.personal.updateOne({ name:"waseem akram"}, //this is the filter 
+{ $set:{name:"Hafiz fahad"}})
+
+
+
+db.personal.updateOne(_id: ObjectId('68401ae7273000a251c59f3c'), //this is the filter 
+{ $set:{name:"Hafiz fahad"}})
+
+
+//updateMany
+db.personal.updateMany({ age:33}, //this is the filter 
+{ $inc:{age:3}}) // increment by 3 
+
+db.personal.updateMany({ age:33}, 
+{ $set:{age:36}})
+
+db.personal.updateMany({ age:36}, 
+{ $unset:{kids:""}}) //kids:null will be remove from collection
+
+
+db.personal.updateMany({}, 
+{ $rename:{hobbies:"coding_skills"}})
+
+db.personal.updateMany({}, 
+{ $currentDate:{"lastModified":true}})
+
+db.personal.updateMany({}, 
+{ $min:{age:20}}) //sbki age 20 kr dega agr usse choti phle hi to ni kre ga 
+
+db.personal.updateMany({}, 
+{ $max:{age:40}}) //sbki age 40 kr dega agr usse bri phle hi to ni kre ga 
+
+
+db.personal.replaceOne({_id: ObjectId('68401ae7273000a251c59f3c')},
+{name:"waseem akram",age:21} //usi id ke andr sara record replace kr dega .
+)
