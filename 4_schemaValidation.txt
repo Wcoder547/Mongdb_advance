@@ -1,0 +1,71 @@
+// Create a new collection with schema validation
+db.createCollection("Students", {
+          validator: {
+                    $jsonSchema: {
+                              title: "student object validation",
+                              required: ["name", "age", "course"],
+                              properties: {
+                                        name: {
+                                                  bsonType: "string",
+                                                  description: "name must be a string"
+                                        },
+                                        age: {
+                                                  bsonType: "int",
+                                                  minimum: 5,
+                                                  maximum: 20,
+                                                  description: "Age must be an integer between 5 and 20"
+                                        },
+                                        course: {
+                                                  bsonType: "string",
+                                                  enum: ["BSIT", "BSCS", "BSSE"],
+                                                  description: "course must be one of BSIT, BSCS, BSSE"
+                                        }
+                              }
+                    }
+          }
+})
+
+// Insert a valid document
+db.Students.insertOne({name: "waseem akram", age: 20, course: "BSIT"})
+
+// Modify an existing collection to add or update validation
+db.runCommand({
+          collMod: "Personal",
+          validator: {
+                    $jsonSchema: {
+                              title: "personal object validation",
+                              required: ["firstName", "lastName", "age", "email"],
+                              properties: {
+                                        firstName: {
+                                                  bsonType: "string",
+                                                  description: "firstName must be a string"
+                                        },
+                                        lastName: {
+                                                  bsonType: "string",
+                                                  description: "lastName must be a string"
+                                        },
+                                        age: {
+                                                  bsonType: "int",
+                                                  minimum: 18,
+                                                  maximum: 65,
+                                                  description: "age must be an integer between 18 and 65"
+                                        },
+                                        email: {
+                                                  bsonType: "string",
+                                                  pattern: "^.+@.+\\..+$",
+                                                  description: "email must be a valid email address"
+                                        }
+                              }
+                    }
+          },
+          validationLevel: "strict",
+          validationAction: "error"
+})
+
+// Insert a valid document into Personal collection
+db.Personal.insertOne({
+          firstName: "John",
+          lastName: "Doe",
+          age: 34,
+          email: "john.doe@example.com"
+})
