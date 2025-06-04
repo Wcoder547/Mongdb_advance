@@ -25,7 +25,7 @@ db.expenses.find({$expr::{$gt:["$price",{$multiply:["$cost", 1.2]}]}}) // comple
 // Finds expenses where the spent amount is greater than the budget.
 
 // $mod
-// Matches documents where the field value divided by the divisor has the specified remainder.
+// Modules Matches documents where the field value divided by the divisor has the specified remainder.
 Example:
 db.users.find({ age: { $mod: [2, 0] } })
 db.users.find({ cost: { $mod: [7.0, 0] } })
