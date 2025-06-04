@@ -1,0 +1,46 @@
+db.collection_name.find({
+          field:"value"  //filter
+}) 
+
+db.collection_name.findOne({
+          field:"value"  //phle wala find kre ga 
+}) 
+
+
+
+db.collection_name.find({}) // find all
+
+
+db.personal.find({
+          name:"waseem akram"
+})
+
+//count
+
+db.personal.find({
+          name:"waseem akram"
+}).count()
+
+//sort 
+1 ascending order
+-1 descending order 
+
+//limit 
+db.personal.find({
+          name:"waseem akram"
+}).limit(3).skip(4);
+ //for pagination 
+
+
+
+//projection 
+db.collection_name.find({
+          field:"value"  //filter
+          {field:1,field:2,field:0}
+}) 
+
+db.collection_name.find({field:"value"}).projection({
+          {field:1,field:2,field:0}
+})
+
+
