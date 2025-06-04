@@ -1,0 +1,50 @@
+// Comparison Operators in MongoDB
+// Used to compare values in queries, e.g. $eq, $ne, $gt, $lt, $gte, $lte
+
+// Logical Operators
+// Combine multiple query conditions, e.g. $and, $or, $not, $nor
+
+// Element Operators
+// Match documents based on the presence or type of a field, e.g. $exists, $type
+
+// $regex
+// Matches documents where a field's value matches a specified regular expression pattern.
+Example:
+db.products.find({ name: { $regex: "^A", $options: "i" } })
+db.personal.find({name:{$regex:"wa"}})
+// Finds products whose name starts with 'A', case-insensitive.
+
+
+
+// $expr
+// Allows the use of aggregation expressions within the query language.
+// Useful for comparing fields within the same document.
+Example:
+db.expenses.find({ $expr: { $gt: ["$spent", "$budget"] } })
+db.expenses.find({$expr::{$gt:["$price",{$multiply:["$cost", 1.2]}]}}) // complex expression
+// Finds expenses where the spent amount is greater than the budget.
+
+// $mod
+// Matches documents where the field value divided by the divisor has the specified remainder.
+Example:
+db.users.find({ age: { $mod: [2, 0] } })
+db.users.find({ cost: { $mod: [7.0, 0] } })
+// Finds users whose age is an even number (divisible by 2).
+
+// $jsonSchema
+// Validates documents against a JSON Schema, often used for schema validation.
+Example:
+db.createCollection("students", {
+          validator: {
+                    $jsonSchema: {
+                              bsonType: "object",
+                              required: ["name", "age"],
+                              properties: {
+                                        name: { bsonType: "string" },
+                                        age: { bsonType: "int", minimum: 18 }
+                              }
+                    }
+          }
+})
+// Creates a collection where each document must have a string 'name' and an integer 'age' >= 18.
+
