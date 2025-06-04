@@ -1,0 +1,15 @@
+db.personal.deleteOne({
+           _id: ObjectId('68401ae7273000a251c59f3c'), //filter
+})
+
+
+db.personal.deleteOne({
+          name: 'Hafiz fahad', //just delete first matched
+})
+
+
+db.personal.deleteMany({
+          age:36,
+})
+
+db.personal.deleteMany({}) //delete all in personal
