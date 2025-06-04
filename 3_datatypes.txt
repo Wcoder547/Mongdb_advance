@@ -1,0 +1,32 @@
+DataTypes..
+
+//string
+//Double
+//32-bit
+//64-bit
+//Boolean
+//Array
+//Object
+//Null
+//Regular Expression
+//Timestamp
+//Date
+//ObjectId
+
+
+{dob: new Date()} // current date and time 
+{dob : new Date("2024-10-18T 18:30:00Z)}
+
+//32-bit integar
+-2,147,483,648 to +2,147,483,648
+4 bytes
+
+//64 bit integar
+
+//8 byte 
+
+
+db.personal.insertOne({name:"waseem akram",age:25, married:false, dob:ISODate("2000-10-15T08:00:00Z"),weight:72.50,kids:null,hobbies:["music","sports"],address:{"street":"123 main st"}})
+
+
+db.personal.insertOne({name:"waseem akram",age:25, married:false, dob:new Date(),weight:72.50,kids:null,hobbies:["music","sports"],address:{"street":"123 main st"}})
