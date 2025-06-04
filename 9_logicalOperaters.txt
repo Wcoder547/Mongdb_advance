@@ -1,0 +1,53 @@
+$and
+// Matches documents that satisfy all the specified conditions.
+db.collection.find({
+          $and: [
+                    { age: { $gt: 18 } },
+                    { status: "active" }
+          ]
+})
+// Finds documents where age > 18 AND status is "active".
+
+$or
+// Matches documents that satisfy at least one of the specified conditions.
+db.collection.find({
+          $or: [
+                    { age: { $lt: 18 } },
+                    { status: "inactive" }
+          ]
+})
+// Finds documents where age < 18 OR status is "inactive".
+
+$nor
+// Matches documents that fail all the specified conditions.
+db.collection.find({
+          $nor: [
+                    { age: { $lt: 18 } },
+                    { status: "inactive" }
+          ]
+})
+// Finds documents where age is NOT < 18 AND status is NOT "inactive".
+
+$not
+// Inverts the effect of a query expression.
+db.collection.find({
+          age: { $not: { $gt: 18 } }
+})
+// Finds documents where age is NOT greater than 18 (i.e., age <= 18).
+
+// Combining logical operators
+db.collection.find({
+          $and: [
+                    { $or: [ { status: "active" }, { status: "pending" } ] },
+                    { age: { $gte: 21 } }
+          ]
+})
+// Finds documents where (status is "active" OR "pending") AND age >= 21.
+
+
+db.collection.find({
+          $and:[{
+                    $or:[{status:"active"},{age:18}]
+          },{age:{$gt:26}}]
+})// for practise query 
+
