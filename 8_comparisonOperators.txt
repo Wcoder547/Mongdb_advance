@@ -1,0 +1,24 @@
+// $eq: Equal
+db.collection.find({ age: { $eq: 25 } })
+
+// $ne: Not equal
+db.collection.find({ status: { $ne: "inactive" } })
+
+// $gt: Greater than
+db.collection.find({ score: { $gt: 80 } })
+
+// $gte: Greater than or equal
+db.collection.find({ price: { $gte: 100 } })7
+
+// $lt: Less than
+db.collection.find({ quantity: { $lt: 50 } })
+
+// $lte: Less than or equal
+db.collection.find({ rating: { $lte: 4.5 } })
+
+// $in: In array
+db.collection.find({ category: { $in: ["A", "B", "C"] } })
+
+// $nin: Not in array
+db.collection.find({ type: { $nin: ["admin", "guest"] } })
+
