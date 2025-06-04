@@ -1,0 +1,52 @@
+$exists
+
+// The $exists operator checks if a field exists (or does not exist) in documents.
+
+// Syntax:
+{ field: { $exists: <boolean> } }
+
+// Example 1: Find documents where the "email" field exists
+db.collection.find({ email: { $exists: true } })
+
+// Example 2: Find documents where the "phone" field does NOT exist
+db.collection.find({ phone: { $exists: false } })
+
+// Example 3: Find documents where the "address" field exists
+db.collection.find({ address: { $exists: true } })
+
+// Example 4: Find documents where the "age" field does NOT exist
+db.collection.find({ age: { $exists: false } })
+
+$type
+
+// The $type operator matches documents where the value of a field is of the specified BSON data type.
+
+// Syntax:
+{ field: { $type: <type> } }
+
+// <type> can be a string alias or a number representing the BSON type.
+
+// Example 1: Find documents where "age" is a number (int or double)
+db.collection.find({ age: { $type: "int" } }) // 32-bit integer
+db.collection.find({ age: { $type: "double" } }) // 64-bit floating point
+
+// Example 2: Find documents where "createdAt" is a date
+db.collection.find({ createdAt: { $type: "date" } })
+
+// Example 3: Find documents where "isActive" is a boolean
+db.collection.find({ isActive: { $type: "bool" } })
+
+// Example 4: Find documents where "tags" is an array
+db.collection.find({ tags: { $type: "array" } })
+
+// Example 5: Find documents where "profile" is an object
+db.collection.find({ profile: { $type: "object" } })
+
+// Example 6: Find documents where "userId" is an ObjectId
+db.collection.find({ userId: { $type: "objectId" } })
+
+// Example 7: Find documents where "score" is either int or double
+db.collection.find({ score: { $type: ["int", "double"] } })
+
+// Common MongoDB type aliases:
+// "double", "string", "object", "array", "binData", "undefined", "objectId", "bool", "date", "null", "regex", "int", "timestamp", "long", "decimal"
