@@ -1,0 +1,128 @@
+$out
+//kia hota he?
+//final output ko kisi naye collection me store karne k lye use hota he
+//syntax:
+db.students.aggregate([
+  {
+    $out: "students_summary"
+  }
+])
+//Yeh aggregation pipeline ka final output "students_summary" naam k naye collection me store kar dega.
+
+db.students.aggregate([
+  {
+    $match: {
+      "age": { $gte: 18 }
+    }
+  },
+  {
+    $out: "valid_students"
+  }
+]) 
+
+//Yeh aggregation pipeline ka output "valid_students" naam k naye collection me store kar dega.
+//return
+[
+  {
+    _id: ObjectId('68419ee9adc9d944aec59f51'),
+    name: 'Hassan',
+    age: 19,
+    class: '10th'
+  },
+  {
+    _id: ObjectId('68419ee9adc9d944aec59f52'),
+    name: 'Fatima',
+    age: 21,
+    class: '12th'
+  }
+]
+
+
+
+db.students.aggregate([
+          {
+          $group: {
+            _id: "$class",
+            Students: { $push: "$name" },
+            
+          }
+          },
+          {
+            $out: "class_data"
+          }
+])
+
+//return
+db.class_data.find()
+[ { _id: null, Students: [ 'Hassan', 'Fatima' ] } ]
+
+
+
+$merge
+//kia hota he?
+//final output ko kisi naye collection me ya existing collection me merge karne k lye use hota he
+
+//$merge ka kaam bhi similar hai $out jaisa, lekin:
+
+    Agar data exist karta hai, to use:
+
+        replace karein?
+
+        ya merge karein?
+
+        ya ignore karein?
+
+    Naya data to insert kar hi deta hai.
+
+//syntax:-
+db.collection.aggregate([
+  {
+    $merge: {
+      into: "target_collection",
+      on: "field_name", // ya "uniqueField" ya "_id"
+      whenMatched: "replace", // ya "keepExisting", "merge", "fail"
+      whenNotMatched: "insert" // ya "discard"
+    }
+  }
+])
+
+db.students.aggregate([
+  {
+    $match: {
+      "age": { $gte: 20 }
+    }
+  },
+  {
+    $merge: {
+      into: "valid_students",
+      whenMatched: "merge",
+      whenNotMatched: "insert"
+    }
+  }
+])
+
+//return
+{ _id: 1, age: 22, city: 'Lahore', name: 'Hassan' },
+{ _id: 2, age: 20, city: 'Karachi', name: 'Fatima' }
+
+
+
+$union
+//kia hota he?
+//do ya zyada collections ya pipelines ko combine karne k lye use hota he
+//just for data showing purpose
+//$unionWith ka use do ya zyada collections ko ek saath combine karne ke liye hota hai. Yeh sirf result dikhata hai, store nahi karta.
+
+//syntax:-
+//db.collection.aggregate([ { $union: [ db.collection2.aggregate([]), db.collection3.aggregate([]) ] } ])
+
+db.students1.aggregate([
+  {
+    $unionWith: {
+      coll: "students2",
+    }
+  },
+
+])
+
+//Sab records dono collections ke ek saath milke aa jaenge.
