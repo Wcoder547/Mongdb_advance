@@ -41,17 +41,11 @@ db.sales.aggregate([
 // Agar koi document in boundaries mein nahi aata toh uska default value "Other" hoga.
 // Output mein hum count aur totalAmount ko aggregate kar rahe hain.
 
-//returns
-[
-  { _id: 33, count: 2, avgMarks: 41 },
-  { _id: 45, count: 1, avgMarks: 59 },
-  { _id: 60, count: 3, avgMarks: 69 },
-  { _id: 80, count: 2, avgMarks: 88.5 },
-  { _id: 'Fail Students', count: 11, avgMarks: 20.5 }
-]
+
 
 
 db.students.aggregate([
+{$match: {pecentage: {$gt: 0}}},
   {
     $bucket: {
       groupBy: "$pecentage",
@@ -74,22 +68,14 @@ db.students.aggregate([
 // Is tarah se hum MongoDB mein $bucket ka use karke data ko groups mein categorize kar sakte hain aur unke upar aggregation operations perform kar sakte hain.
 // $bucket ka use karne se humein data ko better tarike se analyze karne mein madad milti hai.
 
-
-
-
-db.students.aggregate([
-          {$match: {pecentage: {$gt: 0}}},
-  {
-    $bucket: {
-      groupBy: "$pecentage",
-      boundaries: [33, 45, 60, 80,100],
-      default: "Fail students",
-      output: {
-        count: { $sum: 1 },
-      }
-    }
-  }
-])
+//returns
+[
+  { _id: 33, count: 2, avgMarks: 41 },
+  { _id: 45, count: 1, avgMarks: 59 },
+  { _id: 60, count: 3, avgMarks: 69 },
+  { _id: 80, count: 2, avgMarks: 88.5 },
+  { _id: 'Fail Students', count: 11, avgMarks: 20.5 }
+]
 
 
 $bucketAuto
