@@ -1,0 +1,65 @@
+db.collection.updateOne(
+  { _id: ObjectId("60c72b2f9b1e8a001c8e4d3a") }, // Filter
+  { $set: { status: "updated" } } // Update operation
+);
+return 
+{
+  acknowledged: true,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedId: null
+};
+
+db.collection.findOneAndUpdate(
+  { _id: ObjectId("60c72b2f9b1e8a001c8e4d3a") }, // Filter or search query
+  { $set: { status: "updated" } }, // Update operation
+  { returnDocument: "after",
+  projection: { _id: 1, name: 1, status: 1 },
+          sort: { name: 1 },
+          upsert: false
+           })// Options
+
+   //if not find find in filter it will return null,however updateOne will return Blank space.
+
+
+
+  //OPTIONS
+  //projection: { _id: 1, name: 1, status: 1 } // Optional projection
+  //returnDocument: "after" / "before" // Returns the document after the update
+  //sort: 1/-1 value -> { name: 1 } // Optional sort
+  //upsert - true/false -> { upsert: true } // Optional upsert details:-
+  // If true, creates a new document if no document matches the filter
+// If false, does not create a new document
+return 
+{
+  _id: ObjectId("60c72b2f9b1e8a001c8e4d3a"),
+  name: "example",
+  status: "updated"
+};
+
+
+
+//findOneAndReplace()
+db.collection.findOneAndReplace(
+  { _id: ObjectId("60c72b2f9b1e8a001c8e4d3a") }, // Filter or search query
+  { name: "newName", status: "replaced" }, // Replacement document
+  { returnDocument: "after", upsert: false , sort: { name: 1 } ,  } // Options
+);
+
+
+//findOneAndDelete()
+db.collection.deleteOne({field:"value"})
+return 
+{
+          acknowledged:true,
+          deletedCount:1
+}
+db.collection_name.findOneAndDelete({field:"value"},Options //projection,sort)
+//null will return if nothing found
+
+//return 
+{
+          field1:"value",
+          field2:"value",
+          field3:"value",       
+}
