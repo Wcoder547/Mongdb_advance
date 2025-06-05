@@ -1,0 +1,249 @@
+$group operator
+db.collection_name.aggregate([
+          {
+          $group: {
+          _id: "$field_name", // Group by field_name
+          field1: { $accumulator1: { $sum: "$amount" } }, // Sum the amount field
+          field2: { $accumulator2: { $sum: 1 } } // Count the number of documents in each group
+          }
+          }
+])
+
+
+accumulator list 
+$sum
+$avg
+$median
+$max
+$median
+$min
+$Count
+$push
+$addToSet
+$first
+$last
+$top
+$topN
+$bottom
+$bottomN
+
+db.class.aggregate([{
+  $match: { age: { $gte: 20 } }
+}, {
+  $group: {
+    _id: "$class",
+    count: { $sum: 1 }
+  }
+}])
+
+db.class.aggregate([{
+  $match: { age: { $gt: 20 } }
+}, {
+  $group: {
+    _id: "$class",
+    count: { $sum: 1 }
+  }
+}, {
+  $sort: { count: -1 } 
+}])
+
+
+
+db.class.aggregate([
+  { $group: { _id: "$age", students: { $push: "$name" } } },
+])
+
+db.class.aggregate([
+  { $group: { _id: "$age", students: { $addToSet: "$name" } } },
+]) //same working just like push
+
+//returns
+[
+  { _id: 19, students: [ 'Numan Aslam' ] },
+  { _id: 20, students: [ 'Muhammad Talha', 'Shams ali' ] },
+  { _id: 23, students: [ 'waseem akram', 'Littrly talha' ] },
+  { _id: 24, students: [ 'Hafiz fahad ', 'Abdul-rehman' ] },
+  { _id: 21, students: [ ' Umar mujtaba' ] },
+  { _id: 22, students: [ 'Anas Ali ' ] }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$age", students: { $push: "$$ROOT" } } },
+])
+
+
+[
+  { _id: 'BSSE', count: 3 },
+  { _id: 'BSIT', count: 3 },
+  { _id: 'BSCS', count: 3 }
+]
+
+
+db.class.aggregate([
+  { $group: { _id: "$class", max_student_age: { $max: "$age" } } },
+])
+
+//returns
+[
+  { _id: 'BSCS', max_student_age: 24 },
+  { _id: 'BSSE', max_student_age: 23 },
+  { _id: 'BSIT', max_student_age: 23 }
+]
+db.class.aggregate([
+  { $group: { _id: "$class", min_student_age: { $min: "$age" } } },
+])
+//returns
+[
+  { _id: 'BSCS', min_student_age: 22 },
+  { _id: 'BSSE', min_student_age: 19 },
+  { _id: 'BSIT', min_student_age: 20 }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$class", avg_student_age: { $avg: "$age" } } },
+])
+
+[
+  { _id: 'BSCS', avg_student_age: 23.333333333333332 },
+  { _id: 'BSSE', avg_student_age: 20.666666666666668 },
+  { _id: 'BSIT', avg_student_age: 21.333333333333332 }
+]
+db.class.aggregate([
+  { $group: { _id: "$class", total_student_age: { $sum: "$age" } } },
+])
+
+
+db.class.aggregate([
+  { $group: { _id: "$class", median_age: { $median: {input: "$age", method: "approximate"} } } },
+])
+
+//returns
+[
+  { _id: 'BSCS', median_age: 24 },
+  { _id: 'BSSE', median_age: 20 },
+  { _id: 'BSIT', median_age: 21 }
+]
+db.class.aggregate([
+  { $group: { _id: "$class", total_students: { $count: {} } } },
+])
+
+//returns
+[
+  { _id: 'BSSE', total_students: 3 },
+  { _id: 'BSIT', total_students: 3 },
+  { _id: 'BSCS', total_students: 3 }
+]
+db.class.aggregate([
+  { $group: { _id: "$class", first_student: { $first: "$name" } } },
+])
+
+//returns
+[
+  { _id: 'BSSE', first_student: 'Muhammad Talha' },
+  { _id: 'BSIT', first_student: 'waseem akram' },
+  { _id: 'BSCS', first_student: 'Hafiz fahad ' }
+]
+
+
+db.class.aggregate([
+  { $group: { _id: "$class", last_student: { $last: "$name" } } },
+])
+
+//returns
+[
+  { _id: 'BSSE', last_student: 'Littrly talha' },
+  { _id: 'BSIT', last_student: 'Shams ali' },
+  { _id: 'BSCS', last_student: 'Anas Ali ' }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$class", top_student: { $top: { output: ["$name","$class","$age"], sortBy: {"age" : 1} } } } },
+])
+
+//returns
+[
+  { _id: 'BSSE', top_student: [ 'Numan Aslam', 'BSSE', 19 ] },
+  { _id: 'BSIT', top_student: [ 'Shams ali', 'BSIT', 20 ] },
+  { _id: 'BSCS', top_student: [ 'Anas Ali ', 'BSCS', 22 ] }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$class", topN_students: { $topN: { output: ["$name","$class","$age"], sortBy: {"age" : 1}, n: 3 } } } },
+])
+
+
+//returns
+
+[
+  {
+    _id: 'BSCS',
+    topN_students: [
+      [ 'Anas Ali ', 'BSCS', 22 ],
+      [ 'Hafiz fahad ', 'BSCS', 24 ],
+      [ 'Abdul-rehman', 'BSCS', 24 ]
+    ]
+  },
+  {
+    _id: 'BSSE',
+    topN_students: [
+      [ 'Numan Aslam', 'BSSE', 19 ],
+      [ 'Muhammad Talha', 'BSSE', 20 ],
+      [ 'Littrly talha', 'BSSE', 23 ]
+    ]
+  },
+  {
+    _id: 'BSIT',
+    topN_students: [
+      [ 'Shams ali', 'BSIT', 20 ],
+      [ ' Umar mujtaba', 'BSIT', 21 ],
+      [ 'waseem akram', 'BSIT', 23 ]
+    ]
+  }
+]
+db.class.aggregate([
+  { $group: { _id: "$class", bottom_student: { $bottom: { output: ["$name","$class","$age"], sortBy: {"age" : 1} } } } },
+])
+
+//returns
+[
+  { _id: 'BSSE', bottom_student: [ 'Littrly talha', 'BSSE', 23 ] },
+  { _id: 'BSIT', bottom_student: [ 'waseem akram', 'BSIT', 23 ] },
+  { _id: 'BSCS', bottom_student: [ 'Hafiz fahad ', 'BSCS', 24 ] }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$class", bottomN_students: { $bottomN: { output: ["$name","$class","$age"], sortBy: {"age" : 1}, n: 3 } } } },
+])
+
+//returns
+[
+  {
+    _id: 'BSSE',
+    bottomN_students: [
+      [ 'Numan Aslam', 'BSSE', 19 ],
+      [ 'Muhammad Talha', 'BSSE', 20 ],
+      [ 'Littrly talha', 'BSSE', 23 ]
+    ]
+  },
+  {
+    _id: 'BSIT',
+    bottomN_students: [
+      [ 'Shams ali', 'BSIT', 20 ],
+      [ ' Umar mujtaba', 'BSIT', 21 ],
+      [ 'waseem akram', 'BSIT', 23 ]
+    ]
+  },
+  {
+    _id: 'BSCS',
+    bottomN_students: [
+      [ 'Anas Ali ', 'BSCS', 22 ],
+      [ 'Hafiz fahad ', 'BSCS', 24 ],
+      [ 'Abdul-rehman', 'BSCS', 24 ]
+    ]
+  }
+]
+
+db.class.aggregate([
+  { $group: { _id: "$class", total_age: { $sum: "$age" }, average_age: { $avg: "$age" }, max_age: { $max: "$age" }, min_age: { $min: "$age" } } },
+])
+
