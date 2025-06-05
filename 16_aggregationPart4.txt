@@ -1,0 +1,106 @@
+$bucket
+$bucket ka use documents ko groups mein categorize karne ke liye hota hai, jaise SQL mein GROUP BY hota hai.
+// Iska use aggregation operations ke liye hota hai, jaise ki sum, average, count, etc.
+// Example: Agar humein sales data ko month-wise group karna hai, toh hum $bucket ka use kar sakte hain.
+
+
+$bucket ka syntax kuch is tarah hota hai:
+{
+  $bucket: {
+    groupBy: <expression>, //numeric 
+    boundaries: [<boundary1>, <boundary2>, ...], //[30,50,70,100]
+    default: <default value>, // default value agar koi document kisi boundary mein nahi aata toh use kiya jayega //"other"
+    output: {
+      <field1>//just like count: { $sum: <expression> //1 },
+      <field2>: { $avg: <expression> },
+      ...
+    }
+  }
+}
+
+// Yahan, groupBy field ko specify karta hai jiske basis par documents ko group kiya jayega.
+// boundaries ek array hai jismein hum specify karte hain ki kis range mein documents ko group karna hai.     
+// default field specify karta hai ki agar koi document kisi boundary mein nahi aata toh uska kya hoga.
+// output field specify karta hai ki group ke andar kaunse fields ko aggregate karna hai.
+// Example:
+db.sales.aggregate([
+  {
+    $bucket: {
+      groupBy: "$amount",
+      boundaries: [0, 100, 200, 300],
+      default: "Other",
+      output: {
+        count: { $sum: 1 },
+        totalAmount: { $sum: "$amount" }
+      }
+    }
+  }
+])
+// Is example mein, hum sales data ko amount ke basis par group kar rahe hain.
+// 0 se 100, 100 se 200, aur 200 se 300 ke boundaries hain.
+// Agar koi document in boundaries mein nahi aata toh uska default value "Other" hoga.
+// Output mein hum count aur totalAmount ko aggregate kar rahe hain.
+
+
+
+
+db.students.aggregate([
+{$match: {pecentage: {$gt: 0}}},
+  {
+    $bucket: {
+      groupBy: "$pecentage",
+      boundaries: [33, 45, 60, 80,100],
+      default: "Fail students",
+      output: {
+        count: { $sum: 1 },
+      }
+    }
+  }
+])
+
+// Is example mein, hum students ko percentage ke basis par group kar rahe hain.
+// 33 se 45, 45 se 60, 60 se 80, aur 80 se 100 ke boundaries hain.
+// Agar koi student in boundaries mein nahi aata toh uska default value "Fail students" hoga.
+// Output mein hum count ko aggregate kar rahe hain.        
+// Is tarah se hum $bucket ka use karke documents ko groups mein categorize kar sakte hain aur unke upar aggregation operations perform kar sakte hain.
+// $bucket ka use karne se humein data ko better tarike se analyze karne mein madad milti hai.
+// Iska use karne se humein data ko visualize karne mein bhi madad milti hai, jaise ki charts aur graphs banane mein.
+// Is tarah se hum MongoDB mein $bucket ka use karke data ko groups mein categorize kar sakte hain aur unke upar aggregation operations perform kar sakte hain.
+// $bucket ka use karne se humein data ko better tarike se analyze karne mein madad milti hai.
+
+//returns
+[
+  { _id: 33, count: 2, avgMarks: 41 },
+  { _id: 45, count: 1, avgMarks: 59 },
+  { _id: 60, count: 3, avgMarks: 69 },
+  { _id: 80, count: 2, avgMarks: 88.5 },
+  { _id: 'Fail Students', count: 11, avgMarks: 20.5 }
+]
+
+
+$bucketAuto
+$bucketAuto ka use documents ko automatically groups mein categorize karne ke liye hota hai.
+// Iska use aggregation operations ke liye hota hai, jaise ki sum, average, count, etc.
+// Example: Agar humein sales data ko automatically group karna hai, toh hum $bucketAuto ka use kar sakte hain.         
+
+db.students.aggregate([
+        
+  {
+    $bucket: {
+      groupBy: "$pecentage",
+      buckets:3,
+      output:{
+          count: { $sum: 1 },
+          averagePercentage: { $avg: "$pecentage" }
+      }
+
+    }
+  }
+])
+
+//returns
+[
+  { _id: { min: null, max: 12 }, count: 9, avgPercentage: null },
+  { _id: { min: 12, max: 65 }, count: 5, avgPercentage: 36.4 },
+  { _id: { min: 65, max: 92 }, count: 5, avgPercentage: 76.8 }
+]
