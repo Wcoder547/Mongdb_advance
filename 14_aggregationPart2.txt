@@ -51,11 +51,11 @@ db.class.aggregate([{
 
 db.class.aggregate([
   { $group: { _id: "$age", students: { $push: "$name" } } },
-])
+]) //push will add all the values to the array even if they are not unique
 
 db.class.aggregate([
   { $group: { _id: "$age", students: { $addToSet: "$name" } } },
-]) //same working just like push
+]) //same working just like push but only unique values will be added to the array
 
 //returns
 [
