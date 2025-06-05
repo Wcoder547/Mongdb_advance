@@ -4,6 +4,23 @@ pipeline  |   document1 -> document2 -> document3-> document4
                                  stage
             | document1 -> document4
 
+
+
+
+
+db.class.insertMany([
+{_id:1, name:"waseem akram",age:23, class:"BSIT" },
+{_id:2, name:"Hafiz fahad ",age:24, class:"BSCS" },
+{_id:3, name:"Muhammad Talha",age:20, class:"BSSE" },
+{_id:4, name:"Numan Aslam",age:19, class:"BSSE" },
+{_id:5, name:"Abdul-rehman",age:24, class:"BSCS" },
+{_id:6, name:" Umar mujtaba",age:21, class:"BSIT" },
+{_id:7, name:"Littrly talha",age:23, class:"BSSE" },
+{_id:8, name:"Anas Ali ",age:22, class:"BSCS" },
+{_id:9, name:"Shams ali",age:20, class:"BSIT" },
+])
+
+
 //---------------------- Aggregation Pipeline in MongoDB ----------------------//
 
 // The aggregation pipeline processes data records as they pass through a multi-stage pipeline, transforming the documents into aggregated results.
