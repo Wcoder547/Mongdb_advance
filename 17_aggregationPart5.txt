@@ -1,6 +1,16 @@
 $addFields
 //kia hota he?
 //kisi field ko custom field me add karna k lye use hota he 
+
+
+$addFields ka use kisi document mein naye fields add karne ke liye hota hai. Yeh fields hum calculate kar ke ya kisi condition pe based bhi bana sakte hain.
+
+Agar hum kisi existing document mein:
+
+Naya field add karna chahein (e.g. totalMarks)
+Ya existing fields ko remove karna ho (e.g. firstName)
+Ya deeply nested field (e.g. profile.age)
+toh $addFields best option hai.
 //example:
 db.orders.aggregate([
   {
@@ -62,14 +72,50 @@ $unwind
 //kia hota he?
 //array ko individual documents me convert karne k lye use hota he
 //example:
-db.orders.aggregate([
+ db.students.aggregate([
+{
+     $unwind: "$subjects"
+   }
+ ])
+
+
+//return
+[
   {
-    $unwind: "$items"
+    _id: ObjectId('6841742badc9d944aec59f4e'),
+    name: 'Hassan',
+    subjects: 'Math'
+  },
+  {
+    _id: ObjectId('6841742badc9d944aec59f4e'),
+    name: 'Hassan',
+    subjects: 'Physics'
+  },
+  {
+    _id: ObjectId('6841742badc9d944aec59f4e'),
+    name: 'Hassan',
+    subjects: 'Chemistry'
+  },
+  {
+    _id: ObjectId('6841742badc9d944aec59f4f'),
+    name: 'Fatima',
+    subjects: 'Biology'
+  },
+  {
+    _id: ObjectId('6841742badc9d944aec59f4f'),
+    name: 'Fatima',
+    subjects: 'English'
   }
-])
+]
+//Agar hum kisi array ko individual documents me convert karna chahein, toh $unwind use hota hai. Yeh array ke har element ko alag document me convert kar deta hai.
 
 db.orders.aggregate([
   {
     $unwind: "$items.tags"
   }
 ])
+
+
+
+
+
