@@ -1,0 +1,75 @@
+$addFields
+//kia hota he?
+//kisi field ko custom field me add karna k lye use hota he 
+//example:
+db.orders.aggregate([
+  {
+    $addFields: {
+      totalPrice: { $multiply: ["$price", "$quantity"] }
+    }
+  }
+])
+db.students.aggregate([
+  {
+    $addFields: {
+      fullName: { $concat: ["$firstName", "_", "$lastName"] },
+      totalMarks: { $sum: "$marks" },
+      firstName:"$$REMOVE",
+      lastName:"$$REMOVE",
+      city:{
+          $cond: {
+            if: { $eq: ["$city", "Delhi"] },
+            then: "$$REMOVE", 
+            else: "$city"
+          }
+      }
+    }
+  }
+])
+
+
+
+db.students.aggregate([
+  {
+    $addFields: {
+      fullName: { $concat: ["$firstName", "_", "$lastName"] },
+      firstName:"$$REMOVE",
+      lastName:"$$REMOVE",
+      "profile.age" : 30
+      
+    }
+  }
+])
+
+
+db.students.aggregate([
+  {
+    $addFields: {
+      fullName: { $concat: ["$firstName", "_", "$lastName"] },
+      firstName:"$$REMOVE",
+      lastName:"$$REMOVE",
+      totalMarks:{$sum:"$marks"},
+      AverageMarks:{$avg:"$marks"},
+ 
+    }
+  }
+])
+
+
+
+
+$unwind
+//kia hota he?
+//array ko individual documents me convert karne k lye use hota he
+//example:
+db.orders.aggregate([
+  {
+    $unwind: "$items"
+  }
+])
+
+db.orders.aggregate([
+  {
+    $unwind: "$items.tags"
+  }
+])
