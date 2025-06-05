@@ -1,0 +1,155 @@
+//$lookup 
+lookup kia he ?
+
+(Jab tumhare paas do alag collections hain – jaise students aur classes – aur dono mein koi common field hai (jaise classId aur _id), to tum $lookup ki madad se unko join kar sakte ho, taake ek document mein dono collections ki information aa jaaye.)
+
+
+// $lookup is used to join documents from another collection
+// It is similar to SQL JOIN
+// It allows you to perform a left outer join to an unsharded collection in the same database
+// It can also be used to join documents from a sharded collection
+// The $lookup stage has the following syntax:
+
+//syntax
+db.collection.aggregate([
+  {
+    $lookup: {
+      from: "other_collection", //maybe students
+      localField: "field_in_current_collection",//students_id
+      foreignField: "field_in_other_collection",//_id
+      as: "joined_docs" // maybe student -> array
+    }
+  }
+])
+
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "classes",           // dusri collection ka naam
+      localField: "classId",     // students ka field
+      foreignField: "_id",       // classes ka field
+      as: "classInfo"            // result ka naam
+    }
+  }
+])
+
+//returns
+[
+  {
+    _id: ObjectId('68415d5fadc9d944aec59f35'),
+    name: 'Waseem Akram',
+    age: 23,
+    classId: 2,
+    classInfo: [ { _id: 2, className: 'BSIT', section: 'B' } ]
+  },
+  {
+    _id: ObjectId('68415d5fadc9d944aec59f36'),
+    name: 'Muhammad Talha',
+    age: 20,
+    classId: 3,
+    classInfo: [ { _id: 3, className: 'BSSE', section: 'C' } ]
+  },
+]
+
+// $lookup can also be used to join documents from a sharded collection
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "classes",
+      localField: "classId",
+      foreignField: "_id",
+      as: "classInfo"
+    }
+  },
+  {
+    $unwind: "$classInfo" // classInfo ek array hai. Agar tumhe chahie ke result ek object ho instead of array, to tum use karte ho $unwind.
+  }
+])
+
+//returns
+ classInfo: { _id: 2, className: 'BSIT', section: 'B' }
+// $lookup can also be used to join documents from a collection in another database
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "otherDB.classes", // other database
+      localField: "classId",
+      foreignField: "_id",
+      as: "classInfo"
+    }
+  }
+])
+
+
+
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "classes",
+      localField: "classId",
+      foreignField: "_id",
+      as: "classInfo"
+    }
+  },
+  { $match: { name: "Waseem Akram" } }
+])
+
+[
+  {
+    _id: ObjectId('68415d5fadc9d944aec59f35'),
+    name: 'Waseem Akram',
+    age: 23,
+    classId: 2,
+    classInfo: [ { _id: 2, className: 'BSIT', section: 'B' } ]
+  }
+]
+
+//$replaceRoot
+// $replaceRoot is used to replace the root document with a specified document
+// It is similar to $project but replaces the entire document
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "classes",
+      localField: "classId",
+      foreignField: "_id",
+      as: "classInfo"
+    }
+  },
+  {
+    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$classInfo", 0 ] }, "$$ROOT" ] } }
+  } // teach:- https://www.mongodb.com/docs/manual/reference/operator/aggregation/replaceRoot/#mongodb-aggregation-pipeline-replaceroot
+  ,
+  {
+          $project: {
+            _id: 0,
+            className: 1,
+            section: 1,
+            name: 1,
+            age: 1
+          }
+  }
+])
+
+//returns
+[
+  { className: 'BSIT', section: 'B', name: 'Waseem Akram', age: 23 },
+  { className: 'BSSE', section: 'C', name: 'Muhammad Talha', age: 20 },
+  { className: 'BSCS', section: 'A', name: 'Anas Ali', age: 22 },
+  { className: 'BSIT', section: 'B', name: 'Shams Ali', age: 20 },
+  { className: 'BSSE', section: 'C', name: 'Numan Aslam', age: 19 },
+  { className: 'BSCS', section: 'A', name: 'Hafiz Fahad', age: 24 },
+  { className: 'BSSE', section: 'C', name: 'Littrly Talha', age: 23 },
+  { className: 'BSIT', section: 'B', name: 'Umar Mujtaba', age: 21 },
+  { className: 'BSCS', section: 'A', name: 'Abdul Rehman', age: 24 }
+]
+
+
+// $replaceRoot ka use kya hota hai?
+🔹 $lookup aggregation stage ka use hota hai documents ko join karne ke liye, jaise SQL mein JOIN hota hai.
+
+🔹 $replaceRoot aggregation stage hota hai jo poore document ko kisi aur object se replace karta hai.
+🔹 Yeh mostly tab use hota hai jab tum kisi nested object (like classInfo[0]) ko root/document banaana chahtay ho.
+🔹 Tumhare code mein pehle $lookup se classInfo array mili, phir $arrayElemAt se uska pehla element nikala gaya.
+🔹 Phir $mergeObjects se us element ko original document ($$ROOT) ke sath mila diya gaya.
+🔹 $replaceRoot ne is merged object ko naya document bana diya, jisse nested fields directly access ho gayin.
