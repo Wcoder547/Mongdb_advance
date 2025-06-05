@@ -1,0 +1,127 @@
+            |document1->document2->document3->document4->document5->document6
+                                 stage
+pipeline  |   document1 -> document2 -> document3-> document4
+                                 stage
+            | document1 -> document4
+
+//---------------------- Aggregation Pipeline in MongoDB ----------------------//
+
+// The aggregation pipeline processes data records as they pass through a multi-stage pipeline, transforming the documents into aggregated results.
+
+// Common Stages:
+// $match        - Filters documents to pass only those that match the specified condition(s).
+// $sort         - Sorts documents by a specified field(s).
+// $count        - Counts the number of documents that pass through the pipeline.
+// $sortByCount  - Groups documents by a specified expression and sorts by the count.
+// $project      - Reshapes each document in the stream, such as by including, excluding, or adding new fields.
+// $limit        - Limits the number of documents passed to the next stage.
+// $skip         - Skips over a specified number of documents.
+// $sample       - Randomly selects the specified number of documents.
+
+//---------------------- Examples ----------------------//
+
+// 1. $match: Filter documents
+db.collection_name.aggregate([
+{ $match: { class: "BSIT" } } // Only documents with class "BSIT"
+])
+
+// 2. $sort: Sort documents
+db.collection_name.aggregate([
+{ $sort: { age: 1, name: 1 } } // Sort by age ascending, then name ascending
+])
+
+// 3. $count: Count documents
+db.collection_name.aggregate([
+{ $match: { class: "BSIT" } }, // Filter first
+{ $count: "names" }            // Then count the results
+])
+// Output: [{ "names": 5 }]
+
+// 4. $sortByCount: Group and count by a field
+db.students.aggregate([
+{ $sortByCount: "$class" }
+])
+// Output: [{ "_id": "BSIT", "count": 10 }, { "_id": "BBA", "count": 7 }, ...]
+
+// 5. $project: Reshape documents
+db.students.aggregate([
+{ $project: { name: 1, class: 1, _id: 0 } }
+])
+// Output: [{ "name": "Ali", "class": "BSIT" }, ...]
+
+// Add computed fields in $project
+db.students.aggregate([
+{ $project: { 
+          name: 1, 
+          class: 1, 
+          _id: 0,
+          isValidAge: { $gt: ["$age", 20] } // true if age > 20
+} }
+])
+// Output: [{ "name": "Ali", "class": "BSIT", "isValidAge": true }, ...]
+
+// 6. $limit and $skip: Pagination
+db.students.aggregate([
+{ $sort: { age: 1, name: 1 } },
+{ $project: { name: 1, class: 1, _id: 0 } },
+{ $skip: 2 },  // Skip first 2 documents
+{ $limit: 2 }  // Then take next 2 documents
+])
+// Useful for pagination
+
+// 7. $sample: Random selection
+db.students.aggregate([
+{ $sample: { size: 2 } } // Randomly select 2 documents
+])
+
+// 8. $match with $and: Multiple conditions
+db.collection_name.aggregate([
+{ $match: { $and: [
+          { age: { $gt: 20 } },
+          { class: "BSIT" }
+] } }
+])
+// Only documents with age > 20 and class "BSIT"
+
+//---------------------- More Examples ----------------------//
+
+// $group: Group documents by a field and calculate aggregate values
+db.students.aggregate([
+{ $group: { _id: "$class", total: { $sum: 1 } } }
+])
+// Output: [{ "_id": "BSIT", "total": 10 }, { "_id": "BBA", "total": 7 }, ...]
+
+// $unwind: Deconstructs an array field from the input documents to output a document for each element
+db.orders.aggregate([
+{ $unwind: "$items" }
+])
+// Each order with multiple items becomes multiple documents, one per item
+
+// $addFields: Adds new fields to documents
+db.students.aggregate([
+{ $addFields: { isAdult: { $gte: ["$age", 18] } } }
+])
+// Adds a boolean field 'isAdult' to each document
+
+// $lookup: Join documents from another collection
+db.orders.aggregate([
+{ $lookup: {
+          from: "customers",
+          localField: "customerId",
+          foreignField: "_id",
+          as: "customerInfo"
+} }
+])
+// Joins customer info into each order
+
+//---------------------- Summary ----------------------//
+
+// The aggregation pipeline is a powerful tool for data analysis and transformation in MongoDB. 
+// You can combine multiple stages to filter, sort, group, reshape, and join your data as needed.
+
+
+
+
+
+
+
