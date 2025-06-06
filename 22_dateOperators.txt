@@ -1,0 +1,255 @@
+$minute //Date object mein se sirf minute nikalta hai (0–59)
+db.dates.aggregate([
+  {
+    $project: {
+      originalDate: "$date",
+      minutePart: { $minute: "$date" }
+    }
+  }
+])
+
+
+$second //Date mein se seconds (0–59) nikalta hai
+db.dates.aggregate([
+  {
+    $project: {
+      secondPart: { $second: "$date" }
+    }
+  }
+])
+
+
+$millisecond //Millisecond part nikalta hai (0–999)
+db.dates.aggregate([
+  {
+    $project: {
+      msPart: { $millisecond: "$date" }
+    }
+  }
+])
+
+
+$month //Month (1–12) nikalta hai
+db.dates.aggregate([
+  {
+    $project: {
+      monthPart: { $month: "$date" }
+    }
+  }
+])
+
+
+$week // Deprecated hai — use $isoWeek instead.
+
+$year // Year (e.g., 2023) nikalta hai
+db.dates.aggregate([
+  {
+    $project: {
+      yearPart: { $year: "$date" }
+    }
+  }
+])
+
+
+$dayOfMonth // Month ka din (1–31) nikalta hai
+db.dates.aggregate([
+  {
+    $project: {
+      dayOfMonthPart: { $dayOfMonth: "$date" }
+    }
+  }
+])
+
+
+$dayOfWeek // Week ka din (1–7) nikalta hai
+//1 = Sunday, 2 = Monday … 7 = Saturday
+db.dates.aggregate([
+  {
+    $project: {
+      dayOfWeekPart: { $dayOfWeek: "$date" }
+    }
+  }
+])
+
+
+$dayOfYear // Saal ka din (1–366) nikalta hai
+//leap year ka bhi dhyan rakhta hai
+db.dates.aggregate([
+  {
+    $project: {
+      dayOfYearPart: { $dayOfYear: "$date" }
+    }
+  }
+])
+
+
+🔹 Date Arithmetic Operators
+//Date ke sath calculation (add/subtract ya difference nikalna):
+
+These are used for adding, subtracting, or calculating differences between dates:
+
+$dateAdd //Date mein time add karta hai
+db.dates.aggregate([
+  {
+    $project: {
+      futureDate: {
+        $dateAdd: {
+          startDate: "$date",
+          unit: "day",
+          amount: 5
+        }
+      }
+    }
+  }
+])
+
+
+$dateSubtract //Date mein se time minus karta hai
+db.dates.aggregate([
+  {
+    $project: {
+      pastDate: {
+        $dateSubtract: {
+          startDate: "$date",
+          unit: "month",
+          amount: 1
+        }
+      }
+    }
+  }
+])
+
+
+$dateDiff //Do dates ka farq calculate karta hai (days, hours, etc.)
+db.dates.aggregate([
+  {
+    $project: {
+      diffInDays: {
+        $dateDiff: {
+          startDate: "$startDate",
+          endDate: "$endDate",
+          unit: "day"
+        }
+      }
+    }
+  }
+])
+
+
+🔹 Date Construction & Conversion
+
+
+These operators help in creating or converting dates:
+
+$dateFromParts ////Parts se date banata hai (year, month, etc.)
+db.test.aggregate([
+  {
+    $project: {
+      fullDate: {
+        $dateFromParts: {
+          year: 2024,
+          month: 6,
+          day: 5
+        }
+      }
+    }
+  }
+])
+
+
+$dateToParts //Date ko parts mein todta hai (year, month, etc.)
+db.dates.aggregate([
+  {
+    $project: {
+      parts: { $dateToParts: { date: "$date" } }
+    }
+  }
+])
+
+
+$dateFromString //String ko Date mein convert karta hai
+db.datestrings.aggregate([
+  {
+    $project: {
+      dob: {
+        $dateFromString: {
+          dateString: "$dob"
+        }
+      }
+    }
+  }
+])
+
+  
+$dateToString //Date ko string mein convert karta hai
+db.dates.aggregate([
+  {
+    $project: {
+      dobFormatted: {
+        $dateToString: {
+          date: "$date",
+          format: "%Y-%m-%d"
+        }
+      }
+    }
+  }
+])
+
+
+$toDate
+//Any supported format ko date mein convert karta hai
+db.datestrings.aggregate([
+  {
+    $project: {
+      dateField: { $toDate: "$dateStr" }
+    }
+  }
+])
+
+
+🔹 Date Truncation
+
+Used to round/truncate a date to a specified unit (like to the nearest day, month, etc.):
+
+$dateTrunc //Date ko specific unit tak round karta hai (jaise start of day/month)
+db.dates.aggregate([
+  {
+    $project: {
+      roundedDate: {
+        $dateTrunc: {
+          date: "$date",
+          unit: "month"
+        }
+      }
+    }
+  }
+])
+
+🔹 ISO 8601 Week-Date Operators
+
+
+$isoWeek //Week number nikalta hai (ISO format)
+db.dates.aggregate([
+  {
+    $project: {
+      isoWeek: { $isoWeek: "$date" }
+    }
+  }
+])
+$isoWeekYear //ISO week year nikalta hai (e.g., 2023)
+db.dates.aggregate([
+  {
+    $project: {
+      isoWeekYear: { $isoWeekYear: "$date" }
+    }
+  }
+])        
+
+$isoDayOfWeek //1 = Monday, 7 = Sunday (ISO format)
+db.dates.aggregate([
+  {
+    $project: {
+      isoDay: { $isoDayOfWeek: "$date" }
+    }
+  }
+])
