@@ -1,0 +1,16 @@
+//mongodump 
+
+Backup
+mongodump -d school -o D:\school_backup
+// mongodump "D:\school_backup" -d school -c testing --jsonArray //if array of objects
+mongodump -o c:\school_backup
+
+
+// Restore
+mongorestore -d school D:\school_backup\school
+// mongorestore "D:\school_backup" -d school -c testing --jsonArray //if array of objects
+mongorestore -d school c:\school_backup\school
+
+//caution
+mongorestore --drop --dir C:\school_backup\school
+
