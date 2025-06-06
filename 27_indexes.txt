@@ -1,0 +1,68 @@
+$index??
+MongoDB indexes are just like indexes in a book. They help MongoDB search/query faster. Without indexes, MongoDB scans every document — which is slow for large data.
+
+Types of indexes:
+:- single field index //{ name: 1 }
+:- compound index //(Index on multiple fields)
+:- unique index //(Used for unique emails, usernames etc.)
+:- text index //(Used for full-text search)
+:- wildcard index //(Auto-index all fields — useful in dynamic schemas)
+:- Geospatial index //(Used for location-based queries)
+:- hashed index /(Used for sharding — hashes values for even distribution)
+:- sparse index //(Index only those docs which have the field)
+
+db.collectionName.find().explain("executionStats")
+
+db.students.createIndex                      db.students.ensureIndex
+db.students.getIndexes                       db.students.getIndexSpecs
+db.students.getIndices                       db.students.getIndexKeys
+db.students.dropIndexes                      db.students.dropIndex
+db.students.totalIndexSize                   db.students.getDB
+
+db.students.createIndex({ name: -1 })
+db.students.getIndexes()
+db.students.dropIndex({"name_-1" })
+
+
+:- compound index //2 field per index lgana
+db.students.createIndex({ name: 1, age: -1 })
+db.students.getIndexes()
+db.students.dropIndex({"name_1_age_-1" })
+
+
+:- unique index //just like unique emails
+db.students.createIndex({ email: 1 }, { unique: true })
+db.students.getIndexes()
+db.students.dropIndex({"email_1" })
+
+
+:- text index
+db.students.createIndex({ $search: "text" })
+db.students.getIndexes()
+db.students.dropIndex({"$search_text"})
+
+
+:- wildcard index
+//sare column per indexing kr dete he 
+db.students.createIndex({ "$**": 1 }) //1 or -1
+db.students.getIndexes()
+db.students.dropIndex({"$**_1" })
+
+
+:- Geospatial index
+db.students.createIndex({ location: "2dsphere" })
+db.students.getIndexes()
+db.students.dropIndex({"location_2dsphere" })
+
+
+:- hashed index
+db.students.createIndex({ name: "hashed" })
+db.students.getIndexes()
+db.students.dropIndex({"name_hashed" })
+
+
+:- sparse index
+//sparse index only index those documents which have the field
+db.students.createIndex({ age: 1 }, { sparse: true })
+db.students.getIndexes()
+db.students.dropIndex({"age_1" })
