@@ -1,0 +1,109 @@
+$toString //Kisi bhi value ko string mein convert karta hai.
+db.users.aggregate([
+  {
+    $project: {
+      ageString: { $toString: "$age" }
+    }
+  }
+])
+
+$toInt //Kisi value ko integer mein convert karta hai.
+db.users.aggregate([
+  {
+    $project: {
+      salaryInt: { $toInt: "$salary" }
+    }
+  }
+])
+
+$toLong //int64 (bari value) mein convert karta hai, mostly big numbers k liye.
+db.sales.aggregate([
+  {
+    $project: {
+      bigValue: { $toLong: "$amount" }
+    }
+  }
+])
+
+$toDouble //Decimal number (floating point) banata hai.
+db.products.aggregate([
+  {
+    $project: {
+      priceDouble: { $toDouble: "$price" }
+    }
+  }
+])
+
+
+$toDecimel //Precise decimal values k liye, especially finance calculations mein use hota hai.
+db.invoice.aggregate([
+  {
+    $project: {
+      taxDecimal: { $toDecimal: "$tax" }
+    }
+  }
+])
+
+
+$toBool //Value ko true ya false mein convert karta hai.
+db.status.aggregate([
+  {
+    $project: {
+      isActiveBool: { $toBool: "$isActive" }
+    }
+  }
+])
+
+$toDate //String ko Date object mein convert karta hai.
+db.logs.aggregate([
+  {
+    $project: {
+      loginDate: { $toDate: "$loginTime" }
+    }
+  }
+])
+ 
+$toObjectId //String ko ObjectId mein convert karta hai.
+db.data.aggregate([
+  {
+    $project: {
+      idObject: { $toObjectId: "$userId" }
+    }
+  }
+])
+$convert //Advanced conversion operator hai. Custom type conversion with error handling allow karta hai.
+
+db.users.aggregate([
+  {
+    $project: {
+      convertedAge: {
+        $convert: {
+          input: "$age",
+          to: "int",
+          onError: 0,
+          onNull: -1
+        }
+      }
+    }
+  }
+])
+
+$type //Yeh batata hai ke field ka data type kya hai.
+db.users.aggregate([
+  {
+    $project: {
+      typeOfField: { $type: "$age" }
+    }
+  }
+])
+
+$isNumber //Agar value number hai to true, warna false.
+db.users.aggregate([
+  {
+    $project: {
+      isNum: { $isNumber: "$salary" }
+    }
+  }
+])
+
+
