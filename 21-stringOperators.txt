@@ -84,8 +84,22 @@ db.test.aggregate([
 ])
 $dateToString //❓ Date ko string mein convert karta hai.
 db.test.aggregate([
-  { $project: { result: { $dateToString: { format: "%Y-%m-%d", date: "$date" } } } }
+  {
+    $project: {
+      dobFormatted: {
+        $dateToString: {
+          format: "%Y-%m-%d",
+          date: {
+            $dateFromString: {
+              dateString: "$dob"
+            }
+          }
+        }
+      }
+    }
+  }
 ])
+
 $indexofBytes //❓ String mein bytes ke hisaab se index nikalta hai.
 db.test.aggregate([
   { $project: { index: { $indexOfBytes: ["$name", "a"] } } }
