@@ -1,0 +1,195 @@
+$arrayElemAt //Yeh kisi array ke specific index (position) se value nikalta hai.
+db.students.aggregate([
+  {
+    $project: {
+      firstSubject: { $arrayElemAt: ["$subjects", 0] }
+    }
+  }
+])
+
+$firstN //$firstN: Array ke start se N items nikalta hai
+$lastN // Array ke end se N items nikalta hai
+
+db.students.aggregate([
+  {
+    $project: {
+      top2Subjects: { $firstN: { input: "$subjects", n: 2 } },
+      last2Subjects: { $lastN: { input: "$subjects", n: 2 } }
+    }
+  }
+])
+
+
+$maxN  
+$minN  
+//Array me se top N max ya min values nikalta hai.
+
+db.students.aggregate([
+  {
+    $project: {
+      top2Marks: { $maxN: { input: "$marks", n: 2 } },
+      low2Marks: { $minN: { input: "$marks", n: 2 } }
+    }
+  }
+])
+
+
+$slice //Yeh array ka ek hissa nikalta hai.
+
+db.students.aggregate([
+  {
+    $project: {
+      fewSubjects: { $slice: ["$subjects", 2] }
+    }
+  }
+])
+
+$sortArray //Array ko sort karta hai ascending ya descending.
+db.students.aggregate([
+  {
+    $project: {
+      sortedMarks: { $sortArray: { input: "$marks", sortBy: 1 } }
+    }
+  }
+])
+
+
+$reverseArray //Array ko ulta kar deta hai.
+db.students.aggregate([
+  {
+    $project: {
+      reversed: { $reverseArray: "$marks" }
+    }
+  }
+])
+
+$size //Array ke elements ki count batata hai.
+db.students.aggregate([
+  {
+    $project: {
+      subjectCount: { $size: "$subjects" }
+    }
+  }
+])
+
+$in //Check karta hai kya koi value array me exist karti hai ya nahi.
+db.students.aggregate([
+  {
+    $project: {
+      hasMath: { $in: ["Math", "$subjects"] }
+    }
+  }
+])
+
+$indexOfArray //Kisi value ka index (position) batata hai.
+db.students.aggregate([
+  {
+    $project: {
+      mathIndex: { $indexOfArray: ["$subjects", "Math"] }
+    }
+  }
+])
+$isArray //Check karta hai kya field array hai ya nahi.
+db.students.aggregate([
+  {
+    $project: {
+      isSubjectsArray: { $isArray: "$subjects" }
+    }
+  }
+])
+
+$map //Array ke har element pe operation perform karta hai (jaise loop).
+db.students.aggregate([
+  {
+    $project: {
+      newMarks: {
+        $map: {
+          input: "$marks",
+          as: "mark",
+          in: { $add: ["$$mark", 10] }
+        }
+      }
+    }
+  }
+])
+
+$filter //Array me se filtered values deta hai based on condition.
+db.students.aggregate([
+  {
+    $project: {
+      highMarks: {
+        $filter: {
+          input: "$marks",
+          as: "m",
+          cond: { $gt: ["$$m", 50] }
+        }
+      }
+    }
+  }
+])
+
+$reduce //Array ke sare elements ko combine karta hai (sum ya string join jese).
+db.students.aggregate([
+  {
+    $project: {
+      total: {
+        $reduce: {
+          input: "$marks",
+          initialValue: 0,
+          in: { $add: ["$$value", "$$this"] }
+        }
+      }
+    }
+  }
+])
+
+$zip /Do arrays ko combine karta hai — element wise pairing karta hai.
+db.students.aggregate([
+  {
+    $project: {
+      paired: {
+        $zip: {
+          inputs: ["$subjects", "$marks"]
+        }
+      }
+    }
+  }
+])
+
+$range //Number series generate karta hai (0 to N).
+db.nums.aggregate([
+  {
+    $project: {
+      range: { $range: [1, 6] }
+    }
+  }
+])
+$concatArrays //Do arrays ko mila deta hai.
+db.students.aggregate([
+  {
+    $project: {
+      fullArray: { $concatArrays: ["$subjects", "$extraSubjects"] }
+    }
+  }
+])
+$arrayToObject //Array of key-value pairs ko object me convert karta hai.
+db.students.aggregate([
+  {
+    $project: {
+      obj: {
+        $arrayToObject: [["subject", "Math"], ["marks", 90]]
+      }
+    }
+  }
+])
+
+$objectToArray //Object ko array of key-value pairs me convert karta hai.
+db.students.aggregate([
+  {
+    $project: {
+      arr: {
+        $objectToArray: "$studentDetails"
+      }
+    }
+  }
+])
