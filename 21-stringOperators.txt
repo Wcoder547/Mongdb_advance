@@ -1,0 +1,109 @@
+//String Operators
+
+$toString //❓ Kisi number ya date ko string mein convert karta hai.
+db.test.aggregate([
+  { $project: { result: { $toString: "$rollNo" } } }
+])
+
+$toUpper //❓ Kisi string ko uppercase mein convert karta hai.
+db.test.aggregate([
+  { $project: { result: { $toUpper: "$name" } } }
+])
+
+$toLower //❓ Kisi string ko lowercase mein convert karta hai.
+db.test.aggregate([
+  { $project: { result: { $toLower: "$name" } } }
+])
+
+$strLenBytes //❓ Kisi string ki length bytes mein nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $strLenBytes: "$name" } } }
+])
+
+$strLenCP //❓ Kisi string ki length code points mein nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $strLenCP: "$name" } } }
+])
+
+$strcasecmp //❓ ❓ Case-insensitive string comparison (0 return karega agar dono same hain).
+db.test.aggregate([
+  { $project: { isEqual: { $strcasecmp: ["$name", "ALI"] } } }
+])
+
+
+$substr //❓ String ka substring nikalta hai. (deprecated)
+db.test.aggregate([
+  { $project: { result: { $substr: ["$name", 0, 5] } } }
+])
+
+$substrBytes //❓ String ka substring bytes mein nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $substrBytes: ["$name", 0, 5] } } }
+])
+
+$substrCP //❓ String ka substring code points mein nikalta hai.
+db.test.aggregate([
+  { $project: { part: { $substrCP: ["$name", 0, 3] } } }
+])
+
+
+$replaceOne //❓ String mein pehli dafa milne wale substring ko replace karta hai.
+db.test.aggregate([
+  { $project: { result: { $replaceOne: { input: "$name", find: "old", replacement: "new" } } } }
+])
+
+$replaceAll //❓ String mein sabhi milne wale substring ko replace karta hai.
+db.test.aggregate([
+  { $project: { result: { $replaceAll: { input: "$name", find: "old", replacement: "new" } } } }
+])
+$concat //❓ Multiple strings ko jodta hai (concatenate karta hai).
+db.test.aggregate([
+  { $project: { fullName: { $concat: ["$firstName", " ", "$lastName"] } } }
+])
+
+$split //❓ String ko array mein split karta hai based on delimiter.
+db.test.aggregate([
+  { $project: { result: { $split: ["$name", " "] } } }
+])
+$Itrim //❓ String ke start se whitespace hataata hai.
+db.test.aggregate([
+  { $project: { clean: { $ltrim: { input: "$name" } } } }
+])
+$trim //❓ String ke start aur end se whitespace hataata hai.
+db.test.aggregate([
+  { $project: { clean: { $trim: { input: "$name" } } } }
+])
+
+$rtrim: //❓ End (right side) se whitespaces hataata hai.
+db.test.aggregate([
+  { $project: { clean: { $rtrim: { input: "$name" } } } }
+])
+$dateFromString //❓ String ko date mein convert karta hai.
+db.test.aggregate([
+  { $project: { result: { $dateFromString: { dateString: "$dateString" } } } }
+])
+$dateToString //❓ Date ko string mein convert karta hai.
+db.test.aggregate([
+  { $project: { result: { $dateToString: { format: "%Y-%m-%d", date: "$date" } } } }
+])
+$indexofBytes //❓ String mein bytes ke hisaab se index nikalta hai.
+db.test.aggregate([
+  { $project: { index: { $indexOfBytes: ["$name", "a"] } } }
+])
+
+$indexOfCP //❓ String mein code points ke hisaab se index nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $indexOfCP: ["$name", "a"] } } }
+])
+$regexFind //❓ String mein regex pattern se pehli dafa milne wale substring ko nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $regexFind: { input: "$name", regex: /a/ } } } }
+])
+$regexFindAll //❓ String mein regex pattern se sabhi milne wale substrings ko nikalta hai.
+db.test.aggregate([
+  { $project: { result: { $regexFindAll: { input: "$name", regex: /a/ } } } }
+])
+$regexMatch //❓ String ko regex pattern se match karta hai.
+db.test.aggregate([
+  { $project: { result: { $regexMatch: { input: "$name", regex: /a/ } } } }
+])
