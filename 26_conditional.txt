@@ -1,0 +1,44 @@
+$cond
+
+db.products.aggregate([{
+          $project:{
+               name:1,
+               price:1,
+               priceCategory:{$cond:{
+                    $if:{$gt:["$price","1000"]}
+                    then: "Expensive",
+                    else: "Affordable"
+               }}
+               
+          }
+}])
+
+$ifNull
+
+db.products.aggregate([{
+          $project:{
+               name:1,
+               email:{$ifNull:["$email","No Email"]}
+               
+          }
+}])
+
+
+$switch 
+
+db.products.aggregate([{
+          $project:{
+               name:1,
+               percentage:1,
+               grade:{$switch:{
+                    branches:[
+                         {case:{$gt:["$percentage",80]}, then: "A"},
+                         {case:{$gt:["$percentage",60]}, then: "B"},
+                         {case:{$gt:["$percentage",40]}, then: "C"}
+                    ],
+                    default: "Fail"
+               }
+               },
+               
+          }
+}])
