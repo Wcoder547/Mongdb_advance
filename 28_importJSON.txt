@@ -1,0 +1,1 @@
+mongoimport "D\:student.json" -d school -c testing --jsonArray //if array of objects
