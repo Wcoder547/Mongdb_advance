@@ -1,0 +1,64 @@
+$facet
+🔹 Yeh hota kya hai?
+$facet aggregation pipeline stage allow karti hai ke tu multiple pipelines ko parallel run kar sake ek hi aggregate query ke andar. Har pipeline apna result return karti hai ek array ke andar.
+🔹 Use case kab hota hai?
+Agar tu chah raha ho ke aik hi query se:
+
+ Top marks nikal lay
+
+    Students ka count class-wise nikal lay
+
+    Average calculate kar lay
+    ... sab kuch ek hi bar mein, to $facet ka use hota hai
+
+db.students.aggregate([
+...   {
+...     $facet: {
+...       topMarks: [
+...         { $project: { topMarks: "$Marks" } },
+...         { $sort: { topMarks: -1 } },
+...         { $limit: 1 }
+...       ],
+...       totalStudents: [
+...         { $group: { _id: "$class", count: { $sum: 1 } } },
+...         { $sort: { count: -1 } }
+...       ]
+...     }
+...   }
+... ])
+
+
+
+
+$fill
+//kia hota he ?
+$fill
+🔹 Yeh hota kya hai?
+
+$fill aggregation stage use hoti hai missing ya null values ko fill karne ke liye. Tu specify kar sakta hai:
+
+    kis field ko fill karna hai
+
+    kis method se fill karna hai (jaise value, linear, locf etc.)
+
+🔹 Common Fill Methods:
+Method	Matlab
+value	Fixed value se fill karo (e.g., 0)
+locf	Last observed value se fill karo
+linear	Linear interpolation karo
+
+
+
+
+db.students_with_missing_marks.aggregate([
+  {
+    $fill: {
+      partitionBy: "$class",
+      sortBy: { _id: 1 },
+      output: {
+        marks: { value: 0 }  
+      }
+    }
+  }
+])
+
