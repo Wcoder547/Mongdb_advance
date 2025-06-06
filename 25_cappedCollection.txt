@@ -1,0 +1,39 @@
+//capped
+//kia hota he?
+Capped Collection aik fixed-size collection hoti hai jo FIFO (First In, First Out) rule follow karti hai. Iska matlab hai ke jab collection full ho jaye to oldest documents automatic delete ho jate hain jab naye insert karte ho.
+
+//syntax ??
+db.createCollection("students", {
+  capped: true,
+  size: 1024, // in bytes (1 KB)
+  max: 3      // optional: max documents allowed
+})
+
+
+db.students.isCapped()
+//true
+
+//existing colleciton pe kaise implement kre ??
+db.runCommand({
+          convertToCapped:"students",
+          size:51200, //only size will work here
+          max:2
+})
+
+//Use case??
+
+| Scenario           | Why Capped Collection Fits?              |
+| ------------------ | ---------------------------------------- |
+| Logging system | Old logs auto-delete ho jayein           |
+| Chat history  | Sirf latest 100 messages dikhane hain    |
+| Sensor data    | Sirf recent temperature/humidity chahiye |
+| Event stream | FIFO style stream maintain karna         |
+
+
+
+//increasing the max value .
+
+db.runCommand({
+collMod:"log",
+cappedMax:7
+})
