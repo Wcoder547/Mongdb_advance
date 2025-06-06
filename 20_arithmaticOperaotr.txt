@@ -1,0 +1,114 @@
+$add //$add do ya zyada numbers ko jorta hai.
+
+db.sales.aggregate([
+  {
+    $project: {
+      item: 1,
+      total: { $add: ["$price", "$tax"] }
+    }
+  }
+])
+
+
+$subtract //$subtract do values ka farq (difference) nikalta hai.
+db.sales.aggregate([
+  {
+    $project: {
+      item: 1,
+      discountAmount: { $subtract: ["$price", "$discount"] }
+    }
+  }
+])
+
+
+$multiply //$multiply do ya zyada values ko multiply karta hai.
+db.sales.aggregate([
+  {
+    $project: {
+      item: 1,
+      totalSales: { $multiply: ["$price", "$quantity"] }
+    }
+  }
+])
+
+
+$divide //$divide do numbers ko divide karta hai (division).
+db.sales.aggregate([
+  {
+    $project: {
+      item: 1,
+      unitPrice: { $divide: ["$total", "$quantity"] }
+    }
+  }
+])
+
+$Mod//$mod ka use remainder (baaqi) nikalne ke liye hota hai. Yani divide karne ke baad jo bacha.
+db.numbers.aggregate([
+  {
+    $project: {
+      value: 1,
+      isEven: { $mod: ["$value", 2] }
+    }
+  }
+])
+
+$pow //$pow ek number ka power nikalta hai. Jaise 2^3 = 8.
+db.math.aggregate([
+  {
+    $project: {
+      number: 1,
+      cube: { $pow: ["$number", 3] }
+    }
+  }
+])
+
+
+$abs //$abs negative number ko positive banata hai.
+//-9.2 wil 9.2
+
+db.math.aggregate([
+  {
+    $project: {
+      value: 1,
+      absValue: { $abs: ["$value"] }
+    }
+  }
+])
+
+
+$floor //$floor number ka neeche ka integer part leta hai. (4.8 ➝ 4)
+//4.3 and 4.8 will 4
+db.math.aggregate([
+  {
+    $project: {
+      original: 1,
+      floored: { $floor: "$original" }
+    }
+  }
+])
+
+
+$ceil //$ceil number ko upar wala integer bana deta hai. (4.3 ➝ 5) 
+//4.3 and 4.8 will 5
+
+db.math.aggregate([
+  {
+    $project: {
+      original: 1,
+      ceiled: { $ceil: "$original" }
+    }
+  }
+])
+
+
+$round //$round number ko round off karta hai. (4.3 ➝ 4, 4.8 ➝ 5)
+ //4.3 will 4 4.8 will 5
+$trunc //$trunc decimal part cut kar deta hai. (4.3 ➝ 4, 4.8 ➝ 4)
+// 4.3 will 4 4.8 will 4
+
+db.sales.aggregate([
+          $project:{
+                    totalSales:{$multiply:["price","quantity"]}
+          }
+])
+
