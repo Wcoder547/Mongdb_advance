@@ -10,28 +10,28 @@ Each file contains real-world examples that can be copy-pasted directly into `mo
 
 This collection emphasizes terminal-first usage of MongoDB with practical, real-world scenarios. Some of the advanced topics and techniques covered:
 
-* [Schema validation using JSON Schema](https://www.mongodb.com/docs/manual/core/schema-validation/)
-* [Aggregation pipelines](https://www.mongodb.com/docs/manual/core/aggregation-pipeline/)
-* [Advanced query operators](https://www.mongodb.com/docs/manual/reference/operator/query/)
-* [Data transformation stages](https://www.mongodb.com/docs/manual/reference/operator/aggregation-project/)
-* [Cross-collection joins with `$lookup`](https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/)
-* [Array operators](https://www.mongodb.com/docs/manual/reference/operator/query-array/) like `$all`, `$elemMatch`, and `$size`
-* [Type checking with `$type`](https://www.mongodb.com/docs/manual/reference/operator/query/type/)
-* [Capped collections](https://www.mongodb.com/docs/manual/core/capped-collections/)
-* [Conditional logic using `$cond`, `$ifNull`](https://www.mongodb.com/docs/manual/reference/operator/aggregation/cond/)
-* [Indexing strategies](https://www.mongodb.com/docs/manual/indexes/)
-* [Importing JSON with `mongoimport`](https://www.mongodb.com/docs/database-tools/mongoimport/)
-* [Backing up and restoring data](https://www.mongodb.com/docs/manual/core/backups/)
+- [Schema validation using JSON Schema](https://www.mongodb.com/docs/manual/core/schema-validation/)
+- [Aggregation pipelines](https://www.mongodb.com/docs/manual/core/aggregation-pipeline/)
+- [Advanced query operators](https://www.mongodb.com/docs/manual/reference/operator/query/)
+- [Data transformation stages](https://www.mongodb.com/docs/manual/reference/operator/aggregation-project/)
+- [Cross-collection joins with `$lookup`](https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/)
+- [Array operators](https://www.mongodb.com/docs/manual/reference/operator/query-array/) like `$all`, `$elemMatch`, and `$size`
+- [Type checking with `$type`](https://www.mongodb.com/docs/manual/reference/operator/query/type/)
+- [Capped collections](https://www.mongodb.com/docs/manual/core/capped-collections/)
+- [Conditional logic using `$cond`, `$ifNull`](https://www.mongodb.com/docs/manual/reference/operator/aggregation/cond/)
+- [Indexing strategies](https://www.mongodb.com/docs/manual/indexes/)
+- [Importing JSON with `mongoimport`](https://www.mongodb.com/docs/database-tools/mongoimport/)
+- [Backing up and restoring data](https://www.mongodb.com/docs/manual/core/backups/)
 
 ---
 
 ## Tools and Libraries
 
-* [`mongosh`](https://www.mongodb.com/docs/mongodb-shell/)
-* [BSON types](https://www.mongodb.com/docs/manual/reference/bson-types/)
-* [JSON Schema](https://json-schema.org/) for validation logic
-* [mongoimport](https://www.mongodb.com/docs/database-tools/mongoimport/) for importing data
-* MongoDB’s built-in backup and restore tools (`mongodump`, `mongorestore`)
+- [`mongosh`](https://www.mongodb.com/docs/mongodb-shell/)
+- [BSON types](https://www.mongodb.com/docs/manual/reference/bson-types/)
+- [JSON Schema](https://json-schema.org/) for validation logic
+- [mongoimport](https://www.mongodb.com/docs/database-tools/mongoimport/) for importing data
+- MongoDB’s built-in backup and restore tools (`mongodump`, `mongorestore`)
 
 ---
 
@@ -68,6 +68,8 @@ This collection emphasizes terminal-first usage of MongoDB with practical, real-
 ├── 27_indexes.txt
 ├── 28_importJSON.txt
 ├── 29_backup.txt
+├── 30_authentication&UserManagment.txt
+
 ```
 
 Each file is a standalone guide with practice-ready shell code and inline explanations. No directories or nested folder structures are used.

@@ -1,0 +1,116 @@
+db.createUser() //Creates a new user
+db.updateUser() //Change roles or data
+db.dropUser() //Delete specific user
+db.dropAllUser() //Delete all users
+db.grantRolesTouser() //Add roles
+db.revokeRolesFromUser() //Remove roles
+db.getUser() 
+db.getUsers() //List all users
+db.auth() //Authenticates the user
+db.changeUserPassword() //Change password
+
+
+//open in terminal
+sudo nano /etc/mongod.conf
+//add the following line
+security:
+  authorization: "enabled"
+//save and exit
+
+//restart the service
+sudo systemctl restart mongod
+
+
+
+
+db.createUser({
+          user:"admin",
+          pwd:"admin123",
+          roles:[{role:"readwrite",db:"school"}]
+})
+db.auth("admin","admin123")
+
+//role
+:- read
+:- readwrite
+:- dbAdmin
+:- dbAdmin 
+:- userAdmin
+:- dbOwner
+
+//backup & restore roles
+backup
+restore 
+
+//user administration roles
+usreAdminAnyDatabase
+dbAdminAnyDatabase
+
+//superuser roles
+root
+
+//read-only roles 
+readAnyDatabase
+
+//Cluster-level roles
+
+cluster-admin
+clusterManager
+clusterMonitor
+hostManager
+
+//Enable authorization
+
+C:\program files\mongoDB\server\<version>\bin\mongod.cfg
+authorization enabled
+restart mongoDB services
+
+??How to implement it on Linux?
+
+
+
+//practical 
+use admin
+db.createUser({
+          user:"admin",
+          pwd:"admin123",
+          roles:[{role:"root",db:"admin"}]
+})
+db.auth("admin","admin123")
+
+db.createUser({
+          user:"developer",
+          pwd:"dev123",
+          roles:[{role:"read",db:"school"}]
+})
+db.auth("developer","dev123")
+
+db.getUsers()
+
+school> db.getUsers()
+{ users: [], ok: 1 }
+
+
+db.getUser("developer") //only admin can
+
+db.updateUser(
+          "developer",
+          {roles:[{role:"readwrite,db:"school"}]}
+)
+db.changeUserPassword(
+          "developer","pass123"
+)
+db.auth("developer","pass123")
+db.dropUser("developer) //remove a developer
+db.dropAllUser() // remove all usres
+
+
+db.dropAllUser({w:"majority", without:5000}) //jb tk yh delete ho rhie he 5 sec tk write ni kr skte.
+
+
+db.grantRolesTouser("developer","[{role:"dbOwner",db:"school"},{role:"reader",db:"school"}]")
+
+db.revokeRolesFromUser("developer",[{role:"read",db:"school"}])
+
+
+
